@@ -1,0 +1,1131 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portal Académico Ultra-Extendido | C.E.M.N.G. Villa de las Niñas</title>
+    <style>
+        :root {
+            --primary: #1e3a8a;
+            --primary-dark: #1e1b4b;
+            --secondary: #0284c7;
+            --accent: #e11d48;
+            --bg-main: #f8fafc;
+            --card-bg: #ffffff;
+            --text-main: #0f172a;
+            --text-muted: #475569;
+            --border: #cbd5e1;
+            --shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.08), 0 8px 10px -6px rgba(0, 0, 0, 0.04);
+            --radius: 16px;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-main);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        header {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            padding: 2.5rem 2rem;
+            text-align: center;
+            box-shadow: 0 4px 20px rgba(30, 58, 138, 0.25);
+        }
+
+        header h1 {
+            font-size: 2.3rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+            font-weight: 300;
+        }
+
+        .student-badge {
+            display: inline-block;
+            background: rgba(255, 255, 255, 0.2);
+            padding: 0.4rem 1.2rem;
+            border-radius: 50px;
+            font-size: 0.9rem;
+            margin-top: 1rem;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .container {
+            max-width: 1300px;
+            margin: -2rem auto 3rem auto;
+            padding: 0 1.5rem;
+            width: 100%;
+            flex: 1;
+            z-index: 10;
+        }
+
+        .dashboard-nav {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+            gap: 1.25rem;
+            margin-bottom: 2.5rem;
+        }
+
+        .nav-card {
+            background: var(--card-bg);
+            border-radius: var(--radius);
+            padding: 1.75rem 1rem;
+            text-align: center;
+            cursor: pointer;
+            box-shadow: var(--shadow);
+            border: 2px solid transparent;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .nav-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--secondary);
+            box-shadow: 0 20px 30px -10px rgba(2, 132, 199, 0.2);
+        }
+
+        .nav-card.active {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            border-color: transparent;
+            box-shadow: 0 15px 25px -5px rgba(30, 58, 138, 0.35);
+        }
+
+        .nav-icon {
+            font-size: 2.2rem;
+            margin-bottom: 0.75rem;
+            display: block;
+        }
+
+        .nav-card h3 {
+            font-size: 1rem;
+            font-weight: 600;
+            line-height: 1.3;
+        }
+
+        .subject-container {
+            display: none;
+            animation: fadeIn 0.4s ease-in-out forwards;
+        }
+
+        .subject-container.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(15px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .subject-header-banner {
+            background: white;
+            border-radius: var(--radius);
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: var(--shadow);
+            border-left: 6px solid var(--secondary);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .subject-header-banner h2 {
+            font-size: 1.8rem;
+            color: var(--primary);
+            font-weight: 700;
+        }
+
+        .subject-header-banner p {
+            color: var(--text-muted);
+            font-size: 1rem;
+            margin-top: 0.25rem;
+        }
+
+        .back-btn {
+            background: #e2e8f0;
+            border: none;
+            color: var(--text-main);
+            padding: 0.6rem 1.2rem;
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: background 0.2s;
+        }
+
+        .back-btn:hover {
+            background: #cbd5e1;
+        }
+
+        .weeks-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .week-box {
+            background: var(--card-bg);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border);
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .week-box:hover {
+            box-shadow: 0 15px 30px rgba(0,0,0,0.08);
+        }
+
+        .week-title-bar {
+            background: #f1f5f9;
+            padding: 1.25rem 1.75rem;
+            font-size: 1.15rem;
+            font-weight: 600;
+            color: var(--primary);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .week-content-body {
+            padding: 1.75rem;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+        }
+
+        @media (max-width: 900px) {
+            .week-content-body {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .content-column, .eval-column {
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            padding: 1.5rem;
+            border-radius: 12px;
+        }
+
+        .eval-column {
+            background: #f0fdf4;
+            border-color: #bbf7d0;
+        }
+
+        .column-heading {
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            font-weight: 700;
+            color: var(--text-muted);
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+
+        .eval-column .column-heading {
+            color: #15803d;
+        }
+
+        .content-column p, .eval-column p {
+            font-size: 0.95rem;
+            line-height: 1.6;
+            color: var(--text-main);
+            margin-bottom: 0.75rem;
+        }
+
+        .material-list {
+            list-style: none;
+            margin-top: 0.5rem;
+        }
+
+        .material-list li {
+            position: relative;
+            padding-left: 1.25rem;
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+            color: var(--text-muted);
+        }
+
+        .material-list li::before {
+            content: '▫️';
+            position: absolute;
+            left: 0;
+            color: var(--secondary);
+            font-size: 0.75rem;
+            top: 2px;
+        }
+
+        .eval-box-title {
+            font-weight: 700;
+            color: #166534;
+            font-size: 1.05rem;
+            margin-bottom: 0.4rem;
+        }
+
+        footer {
+            text-align: center;
+            padding: 2.5rem;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            background: white;
+            border-top: 1px solid var(--border);
+            margin-top: auto;
+        }
+
+        .welcome-prompt {
+            text-align: center;
+            padding: 3.5rem 1.5rem;
+            background: white;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            margin-bottom: 2rem;
+        }
+
+        .welcome-prompt h2 {
+            font-size: 1.8rem;
+            color: var(--primary);
+            margin-bottom: 0.75rem;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>C.E.M.N.G. "VILLA DE LAS NIÑAS"</h1>
+    <p>Portal Académico Estudiantil | IV Parcial — Ciclo Lectivo 2026</p>
+    <div class="student-badge">Bachillerato en Ciencias y Humanidades | 10mo Grado Sección A</div>
+</header>
+
+<div class="container">
+
+    <div id="welcome-view" class="welcome-prompt">
+        <h2>¡Bienvenida al Portal Didáctico Oficial del IV Parcial!</h2>
+        <p>Este espacio contiene la planificación detallada, recursos teóricos ampliados, guías de estudio y actividades prácticas de evaluación para todas tus asignaturas técnicas[cite: 1, 2, 3, 4, 5]. Selecciona una materia abajo para comenzar.</p>
+    </div>
+
+    <div class="dashboard-nav">
+        <div class="nav-card" onclick="openSubject('analisis', event)">
+            <span class="nav-icon">💻</span>
+            <h3>Análisis y Diseño</h3>
+        </div>
+        <div class="nav-card" onclick="openSubject('infapli', event)">
+            <span class="nav-icon">🖥️</span>
+            <h3>Informática Aplicada</h3>
+        </div>
+        <div class="nav-card" onclick="openSubject('legislacion', event)">
+            <span class="nav-icon">🛡️</span>
+            <h3>Legislación Informática</h3>
+        </div>
+        <div class="nav-card" onclick="openSubject('programacion', event)">
+            <span class="nav-icon">⚡</span>
+            <h3>Programación (C++)</h3>
+        </div>
+        <div class="nav-card" onclick="openSubject('ofimatica', event)">
+            <span class="nav-icon">📊</span>
+            <h3>Ofimática</h3>
+        </div>
+    </div>
+
+    <!-- ================= ASIGNATURA 1: ANÁLISIS Y DISEÑO ================= -->
+    <div id="analisis" class="subject-container">
+        <div class="subject-header-banner">
+            <div>
+                <h2>Análisis y Diseño de Sistemas</h2>
+                <p>Docente: Lic. Ever Omar Nolasco Argueta | IV Parcial 2026[cite: 1]</p>
+            </div>
+            <button class="back-btn" onclick="goHome()">⬅️ Volver al Menú</button>
+        </div>
+
+        <div class="weeks-grid">
+            <div class="week-box">
+                <div class="week-title-bar">📅 Semana (17-28 Agosto) — Fase 1: Levantamiento e Identificación de Stakeholders</div>
+                <div class="week-content-body">
+                    <div class="content-column">
+                        <div class="column-heading">📚 Contenido Teórico y Recursos Didácticos</div>
+                        <p>Estudio de los actores críticos (stakeholders directos e indirectos)[cite: 1]. Técnicas formales de indagación: formulación de entrevistas estructuradas, diseño de encuestas cuantitativas de satisfacción y auditoría documental de archivos físicos[cite: 1].</p>
+                        <ul class="material-list">
+                            <li>Guía de buenas prácticas para la redacción de preguntas abiertas y cerradas.</li>
+                            <li>Formato modelo para la minuta de entrevistas con clientes institucionales.</li>
+                        </ul>
+                    </div>
+                    <div class="eval-column">
+                        <div class="column-heading">📝 Actividad de Evaluación Enriquecida</div>
+                        <div class="eval-box-title">Simulación de Entrevista de Requerimientos y Entrega de Bitácora</div>
+                        <p>Simulación de rol de 15 minutos en parejas (Analista y Cliente). Cada equipo debe recolectar y entregar una bitácora inicial con al menos 10 requerimientos preliminares debidamente clasificados[cite: 1].</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="week-box">
+                <div class="week-title-bar">📅 Semana (17-28 Agosto) — Fase 2: Requerimientos Funcionales y No Funcionales</div>
+                <div class="week-content-body">
+                    <div class="content-column">
+                        <div class="column-heading">📚 Contenido Teórico y Recursos Didácticos</div>
+                        <p>Diferenciación exacta entre requerimientos funcionales (lógica operativa del sistema) y restricciones no funcionales (rendimiento, seguridad, disponibilidad)[cite: 1]. Aplicación de la matriz MoSCoW para priorización técnica[cite: 1].</p>
+                        <ul class="material-list">
+                            <li>Matriz interactiva Excel para ponderación de prioridades en proyectos de software.</li>
+                        </ul>
+                    </div>
+                    <div class="eval-column">
+                        <div class="column-heading">📝 Actividad de Evaluación Enriquecida</div>
+                        <div class="eval-box-title">Auditoría y Clasificación de Requerimientos en Caso Real</div>
+                        <p>Revisión exhaustiva de un expediente comercial desordenado. El alumno debe extraer, depurar y ordenar una tabla formal de 8 requerimientos funcionales y 6 no funcionales[cite: 1].</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="week-box">
+                <div class="week-title-bar">📅 Semana (31 Agosto - 11 Sept) — Fase 3: Documentación (DERS) e Historias de Usuario</div>
+                <div class="week-content-body">
+                    <div class="content-column">
+                        <div class="column-heading">📚 Contenido Teórico y Recursos Didácticos</div>
+                        <p>Estructuración del Documento de Especificación de Requerimientos de Software (DERS). Introducción a metodologías ágiles mediante Historias de Usuario (Formato: "Como... quiero... para...") y sus criterios de aceptación[cite: 1].</p>
+                        <ul class="material-list">
+                            <li>Plantilla base oficial del DERS adaptada para proyectos de bachillerato técnico.</li>
+                        </ul>
+                    </div>
+                    <div class="eval-column">
+                        <div class="column-heading">📝 Actividad de Evaluación Enriquecida</div>
+                        <div class="eval-box-title">Taller Práctico de Redacción y Evaluación Cruzada por Pares</div>
+                        <p>Redacción de 5 Historias de Usuario completas con criterios BDD para un módulo de control escolar. Cada grupo revisa y califica el trabajo de otro equipo mediante rúbrica institucional[cite: 1].</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="week-box">
+                <div class="week-title-bar">📅 Semana (14-25 Sept) — Fase 4: Modelado de Arquitectura (Diagramas de Contexto Nivel 0)</div>
+                <div class="week-content-body">
+                    <div class="content-column">
+                        <div class="column-heading">📚 Contenido Teórico y Recursos Didácticos</div>
+                        <p>Modelado estructurado bajo la notación Gane & Sarson. Estudio de entidades externas, procesos principales, almacenes y flujos de datos. Construcción de Diagramas de Contexto[cite: 1].</p>
+                        <ul class="material-list">
+                            <li>Manual gráfico de simbología estándar para DFDs.</li>
+                        </ul>
+                    </div>
+                    <div class="eval-column">
+                        <div class="column-heading">📝 Actividad de Evaluación Enriquecida</div>
+                        <div class="eval-box-title">Diseño Individual y Sustentación de Diagrama de Contexto</div>
+                        <p>Elaboración gráfica en papel y digital de un Diagrama de Contexto (Nivel 0) para el sistema de biblioteca o notas de la institución, detallando entradas y salidas exactas[cite: 1].</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="week-box">
+                <div class="week-title-bar">📅 Semana (13-17 Sept) — Fase 5: Desglose y Balanceo de DFDs (Nivel 1 y 2)</div>
+                <div class="week-content-body">
+                    <div class="content-column">
+                        <div class="column-heading">📚 Contenido Teórico y Recursos Didácticos</div>
+                        <p>Explosión de procesos complejos hacia diagramas hijos de Nivel 1 y Nivel 2. Leyes estrictas de balanceo y conservación de flujos entre niveles jerárquicos[cite: 1].</p>
+                        <ul class="material-list">
+                            <li>Guía de errores comunes y flujos desbalanceados en diagramación estructurada.</li>
+                        </ul>
+                    </div>
+                    <div class="eval-column">
+                        <div class="column-heading">📝 Actividad de Evaluación Enriquecida</div>
+                        <div class="eval-box-title">Laboratorio de Depuración de DFDs y Corrección de Errores</div>
+                        <p>Análisis de un diagrama desbalanceado con 5 fallas lógicas intencionales. El estudiante debe documentar los errores y entregar la versión depurada y coherente[cite: 1].</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="week-box">
+                <div class="week-title-bar">📅 Semana (28 Sept - 30 Oct) — Fase 6: Diccionarios de Datos y Herramientas CASE</div>
+                <div class="week-content-body">
+                    <div class="content-column">
+                        <div class="column-heading">📚 Contenido Teórico y Recursos Didácticos</div>
+                        <p>Construcción del Diccionario de Datos (metadatos, tipos, longitudes). Especificación lógica mediante pseudocódigo y tablas de decisión. Uso de herramientas CASE basadas en web (Lucidchart / Draw.io)[cite: 1].</p>
+                        <ul class="material-list">
+                            <li>Tutorial técnico de diseño colaborativo en herramientas CASE en la nube.</li>
+                        </ul>
+                    </div>
+                    <div class="eval-column">
+                        <div class="column-heading">📝 Actividad de Evaluación Enriquecida</div>
+                        <div class="eval-box-title">Proyecto Final Integrador: DFD Digital y Diccionario de Datos</div>
+                        <p>Entrega oficial del proyecto modelado en herramienta CASE (Nivel 0 y Nivel 1) junto a su respectivo Diccionario de Datos estructurado en formato tabular[cite: 1].</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ================= ASIGNATURA 2: INFORMÁTICA APLICADA ================= -->
+    <div id="infapli" class="subject-container">
+        <div class="subject-header-banner">
+            <div>
+                <h2>Informática Aplicada</h2>
+                <p>Docente: Lic. Ever Omar Nolasco Argueta | IV Parcial 2026[cite: 2]</p>
+            </div>
+            <button class="back-btn" onclick="goHome()">⬅️ Volver al Menú</button>
+        </div>
+
+        <div class="weeks-grid">
+            <div class="week-box">
+                <div class="week-title-bar">📅 Semana (17-21 Ago) — Seguridad Estática y Protección ESD en Laboratorio</div>
+                <div class="week-content-body">
+                    <div class="content-column">
+                        <div class="column-heading">📚 Contenido Teórico y Recursos Didácticos</div>
+                        <p>Estudio físico de la electricidad estática y el fenómeno ESD. Prevención de daños invisibles en microcomponentes de silicio. Uso correcto de pulseras antiestáticas y alfombrillas disipativas[cite: 2].</p>
+                        <ul class="material-list">
+                            <li>Normas internacionales de seguridad eléctrica en bancos de ensamble de PC.</li>
+                        </ul>
+                    </div>
+                    <div class="eval-column">
+                        <div class="column-heading">📝 Actividad de Evaluación Enriquecida</div>
+                        <div class="eval-box-title">Examen Práctico de Conexión a Tierra y Uso de Pulsera ESD</div>
+                        <p>Evaluación presencial del montaje del puesto de trabajo, comprobando continuidad con multímetro y uso adecuado del equipo de protección bajo lista de cotejo[cite: 2].</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="week-box">
+                <div class="week-title-bar">📅 Semana (24-28 Ago) — Ensamblaje Metódico y Gestión de Tornillería</div>
+                <div class="week-content-body">
+                    <div class="content-column">
+                        <div class="column-heading">📚 Contenido Teórico y Recursos Didácticos</div>
+                        <p>Técnicas de desensamble y ensamble seguro. Clasificación de herramientas de precisión y mapeo espacial de tornillos y componentes internos del chasis[cite: 2].</p>
+                        <ul class="material-list">
+                            <li>Guía ilustrada para la organización y categorización de tornillería en torres ATX.</li>
+                        </ul>
+                    </div>
+                    <div class="eval-column">
+                        <div class="column-heading">📝 Actividad de Evaluación Enriquecida</div>
+                        <div class="eval-box-title">Taller Práctico de Desensamble y Elaboración de Bitácora</div>
+                        <p>Desarme completo de una unidad central de procesamiento en desuso utilizando bandejas organizadoras y redacción de bitácora técnica detallada[cite: 2].</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="week-box">
+                <div class="week-title-bar">📅 Semana (31 Ago - 04 Sep) — Arquitectura Interna del Microprocesador (CPU)</div>
+                <div class="week-content-body">
+                    <div class="content-column">
+                        <div class="column-heading">📚 Contenido Teórico y Recursos Didácticos</div>
+                        <p>Estudio de la Unidad de Control (UC), Unidad Aritmético-Lógica (ALU) y registros internos. Ciclo de instrucción (Fetch-Decode-Execute) y arquitecturas x86 y x64[cite: 2].</p>
+                        <ul class="material-list">
+                            <li>Esquema interactivo del flujo de microinstrucciones en el silicio.</li>
+                        </ul>
+                    </div>
+                    <div class="eval-column">
+                        <div class="column-heading">📝 Actividad de Evaluación Enriquecida</div>
+                        <div class="eval-box-title">Prueba Técnica de Ciclo de Instrucción y Bloques de CPU</div>
+                        <p>Cuestionario analítico sobre las tareas de la ALU frente a la Unidad de Control durante operaciones aritméticas básicas[cite: 2].</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="week-box">
+                <div class="week-title-bar">📅 Semana (07-11 Sep) — Rendimiento, Generaciones y Caché en Procesadores</div>
+                <div class="week-content-body">
+                    <div class="content-column">
+                        <div class="column-heading">📚 Contenido Teórico y Recursos Didácticos</div>
+                        <p>Comparativa de generaciones de CPUs (Intel Core vs AMD Ryzen). Análisis de frecuencias (GHz), núcleos, hilos (multithreading), memoria Caché L1/L2/L3 y TDP[cite: 2].</p>
+                        <ul class="material-list">
+                            <li>Guía de análisis de fichas técnicas oficiales (Intel ARK y AMD Specs).</li>
+                        </ul>
+                    </div>
+                    <div class="eval-column">
+                        <div class="column-heading">📝 Actividad de Evaluación Enriquecida</div>
+                        <div class="eval-box-title">Laboratorio de Comparativa y Selección de Hardware</div>
+                        <p>Selección justificada de procesadores ideales para perfiles profesionales específicos (ofimática vs renderizado 3D) a partir de sus especificaciones técnicas[cite: 2].</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="week-box">
+                <div class="week-title-bar">📅 Semana (14-18 Sep) — La Tarjeta Madre y Factores de Forma</div>
+                <div class="week-content-body">
+                    <div class="content-column">
+                        <div class="column-heading">📚 Contenido Teórico y Recursos Didácticos</div>
+                        <p>La tarjeta madre como circuito impreso troncal. Estudio de factores de forma (ATX, Micro-ATX, Mini-ITX) y su compatibilidad dimensional con gabinetes y fuentes[cite: 2].</p>
+                        <ul class="material-list">
+                            <li>Tabla maestra de compatibilidad de factores de forma y tornillería.</li>
+                        </ul>
+                    </div>
+                    <div class="eval-column">
+                        <div class="column-heading">📝 Actividad de Evaluación Enriquecida</div>
+                        <div class="eval-box-title">Práctica de Inspección Física y Selección de Chasis</div>
+                        <p>Inspección táctil de placas base en desuso y ejercicio de selección de componentes compatibles para armar un equipo Micro-ATX[cite: 2].</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="week-box">
+                <div class="week-title-bar">📅 Semana (21-25 Sep) — Zócalos de Procesador y Sistemas de Disipación</div>
+                <div class="week-content-body">
+                    <div class="content-column">
+                        <div class="column-heading">📚 Contenido Teórico y Recursos Didácticos</div>
+                        <p>Tecnologías de sockets (LGA, PGA, BGA). Mecanismos de retención mecánica, alineación de pines y aplicación uniforme de pasta térmica con montaje de disipadores[cite: 2].</p>
+                        <ul class="material-list">
+                            <li>Guía visual de prevención para instalación segura de procesadores en zócalos LGA.</li>
+                        </ul>
+                    </div>
+                    <div class="eval-column">
+                        <div class="column-heading">📝 Actividad de Evaluación Enriquecida</div>
+                        <div class="eval-box-title">Demostración Comprobada de Montaje de CPU y Cooler</div>
+                        <p>Práctica supervisada de instalación física de CPU, limpieza de residuos y aplicación de compuesto térmico antes de fijar el sistema de enfriamiento[cite: 2].</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="week-box">
+                <div class="week-title-bar">📅 Semana (28 Sep - 02 Oct) — Arquitectura Chipset Clásica (Puente Norte y Sur)</div>
+                <div class="week-content-body">
+                    <div class="content-column">
+                        <div class="column-heading">📚 Contenido Teórico y Recursos Didácticos</div>
+                        <p>Topología clásica de doble chip. Funciones del Puente Norte (Northbridge) para memoria y gráficos, y Puente Sur (Southbridge) para periféricos y almacenamiento[cite: 2].</p>
+                        <ul class="material-list">
+                            <li>Diagrama esquemático de bloques de una placa base tradicional.</li>
+                        </ul>
+                    </div>
+                    <div class="eval-column">
+                        <div class="column-heading">📝 Actividad de Evaluación Enriquecida</div>
+                        <div class="eval-box-title">Ejercicio de Esquematización de Flujos de Datos Clásicos</div>
+                        <p>Trazado gráfico en papel del recorrido de una solicitud de lectura de disco hacia la memoria RAM bajo la arquitectura de Puente Norte y Sur[cite: 2].</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="week-box">
+                <div class="week-title-bar">📅 Semana (05-09 Oct) — Evolución Tecnológica y Arquitectura PCH Moderna</div>
+                <div class="week-content-body">
+                    <div class="content-column">
+                        <div class="column-heading">📚 Contenido Teórico y Recursos Didácticos</div>
+                        <p>Integración del controlador de memoria (IMC) en el CPU. Nacimiento de los chipsets de un solo chip (PCH - Platform Controller Hub) y buses de alta velocidad DMI[cite: 2].</p>
+                        <ul class="material-list">
+                            <li>Lectura técnica: "La eliminación del Puente Norte y la era del PCH".</li>
+                        </ul>
+                    </div>
+                    <div class="eval-column">
+                        <div class="column-heading">📝 Actividad de Evaluación Enriquecida</div>
+                        <div class="eval-box-title">Cuestionario Técnico Analítico de Latencias</div>
+                        <p>Evaluación sobre las ventajas de velocidad al integrar el controlador de memoria directamente dentro del dado de silicio del procesador[cite: 2].</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="week-box">
+                <div class="week-title-bar">📅 Semana (12-16 Oct) — Almacenamiento Secundario e Interfaz SATA III</div>
+                <div class="week-content-body">
+                    <div class="content-column">
+                        <div class="column-heading">📚 Contenido Teórico y Recursos Didácticos</div>
+                        <p>Especificaciones de la interfaz Serial ATA (SATA I, II y III hasta 6 Gb/s). Arquitectura de cables de datos de 7 pines, energía de 15 pines y montaje de unidades mecánicas y SSDs de 2.5"[cite: 2].</p>
+                        <ul class="material-list">
+                            <li>Guía rápida de conexión de discos SATA y asignación de energía en fuentes ATX.</li>
+                        </ul>
+                    </div>
+                    <div class="eval-column">
+                        <div class="column-heading">📝 Actividad de Evaluación Enriquecida</div>
+                        <div class="eval-box-title">Taller Práctico de Montaje y Detección de Discos SATA</div>
+                        <p>Instalación física de un disco SSD de 2.5", conexión de cables de datos/energía y verificación de reconocimiento en la interfaz UEFI de la placa base[cite: 2].</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="week-box">
+                <div class="week-title-bar">📅 Semana (19-23 Oct) — Unidades de Estado Sólido M.2 y Disipación Térmica</div>
+                <div class="week-content-body">
+                    <div class="content-column">
+                        <div class="column-heading">📚 Contenido Teórico y Recursos Didácticos</div>
+                        <p>Ranuras M.2 (2242, 2260, 2280). Identificación de muescas mecánicas y claves (B-Key, M-Key). Prevención del estrangulamiento térmico mediante disipadores pasivos[cite: 2].</p>
+                        <ul class="material-list">
+                            <li>Catálogo visual de ranuras M.2 y diccionario de llaves de compatibilidad.</li>
+                        </ul>
+                    </div>
+                    <div class="eval-column">
+                        <div class="column-heading">📝 Actividad de Evaluación Enriquecida</div>
+                        <div class="eval-box-title">Práctica de Inspección Táctil y Fijación M.2 de Precisión</div>
+                        <p>Inspección con lupas de aumento de las llaves M-Key y montaje correcto con tornillo milimétrico de fijación en la placa base[cite: 2].</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="week-box">
+                <div class="week-title-bar">📅 Semana (26-30 Oct) — Protocolos de Transferencia NVMe vs SATA en M.2</div>
+                <div class="week-content-body">
+                    <div class="content-column">
+                        <div class="column-heading">📚 Contenido Teórico y Recursos Didácticos</div>
+                        <p>Protocolo AHCI/SATA frente al protocolo avanzado NVMe (PCI Express). Comparativa de tasas de transferencia, latencias e IOPS en unidades de estado sólido[cite: 2].</p>
+                        <ul class="material-list">
+                            <li>Tabla comparativa de rendimiento entre SSDs SATA M.2 y NVMe PCIe Gen 4/5.</li>
+                        </ul>
+                    </div>
+                    <div class="eval-column">
+                        <div class="column-heading">📝 Actividad de Evaluación Enriquecida</div>
+                        <div class="eval-box-title">Estudio de Casos de Rendimiento y Benchmarking</div>
+                        <p>Justificación técnica de compra de discos NVMe o SATA según perfiles profesionales específicos (edición de video 4K vs ofimática ligera)[cite: 2].</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="week-box">
+                <div class="week-title-bar">📅 Semana (02-06 Nov) — Panel Trasero, Chapa I/O Shield y Conectividad</div>
+                <div class="week-content-body">
+                    <div class="content-column">
+                        <div class="column-heading">📚 Contenido Teórico y Recursos Didácticos</div>
+                        <p>Estudio del panel de E/S trasero y la chapa I/O Shield (Blindaje EMI). Clasificación de puertos USB, salidas de video (HDMI, DisplayPort), red RJ-45 y jacks de audio HD[cite: 2].</p>
+                        <ul class="material-list">
+                            <li>Glosario gráfico interactivo de los conectores traseros de una motherboard moderna.</li>
+                        </ul>
+                    </div>
+                    <div class="eval-column">
+                        <div class="column-heading">📝 Actividad de Evaluación Enriquecida</div>
+                        <div class="eval-box-title">Práctica Intensiva de Ensamblaje de I/O Shield y Periféricos</div>
+                        <p>Evaluación cronometrada de montaje correcto de la lámina I/O Shield en chasis sin dobleces y conexión rápida de periféricos estándar[cite: 2].</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ================= ASIGNATURA 3: LEGISLACIÓN INFORMÁTICA ================= -->
+    <div id="legislacion" class="subject-container">
+        <div class="subject-header-banner">
+            <div>
+                <h2>Legislación Aplicada a la Informática</h2>
+                <p>Docente: Lic. Ever Omar Nolasco Argueta | IV Parcial 2026[cite: 3]</p>
+            </div>
+            <button class="back-btn" onclick="goHome()">⬅️ Volver al Menú</button>
+        </div>
+
+        <div class="weeks-grid">
+            <div class="week-box">
+                <div class="week-title-bar">📅 Semana 1 (17-21 Ago) — Introducción a la Ciberseguridad y Amenazas Digitales</div>
+                <div class="week-content-body">
+                    <div class="content-column">
+                        <div class="column-heading">📚 Contenido Teórico y Recursos Didácticos</div>
+                        <p>Fundamentos teóricos de ciberseguridad y protección de activos de información. Taxonomía de amenazas digitales en usuarios e instituciones[cite: 3]. Marco ético y legal.</p>
+                        <ul class="material-list">
+                            <li>Lectura base: "El valor estratégico de la información en el ciberespacio".</li>
+                        </ul>
+                    </div>
+                    <div class="eval-column">
+                        <div class="column-heading">📝 Actividad de Evaluación Enriquecida</div>
+                        <div class="eval-box-title">Lluvia de Ideas y Mapa Conceptual Colaborativo</div>
+                        <p>Construcción grupal de un mapa conceptual integrando las principales categorías de amenazas informáticas y su impacto legal[cite: 3].</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="week-box">
+                <div class="week-title-bar">📅 Semana 2 (24-28 Ago) — Acceso Ilícito (Hacking) y Tipos de Hackers</div>
+                <div class="week-content-body">
+                    <div class="content-column">
+                        <div class="column-heading">📚 Contenido Teórico y Recursos Didácticos</div>
+                        <p>Conceptualización legal del Acceso Ilícito. Distinción ética entre Sombreros Blancos (White Hat), Sombreros Negros (Black Hat) y Sombreros Grises (Grey Hat)[cite: 3].</p>
+                        <ul class="material-list">
+                            <li>Expediente de casos reales sobre brechas de seguridad célebres.</li>
+                        </ul>
+                    </div>
+                    <div class="eval-column">
+                        <div class="column-heading">📝 Actividad de Evaluación Enriquecida</div>
+                        <div class="eval-box-title">Análisis Forense de Casos de Intrusión</div>
+                        <p>Resolución analítica de un reporte de intrusión informática real, identificando el perfil del atacante y la tipificación legal de la falta[cite: 3].</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="week-box">
+                <div class="week-title-bar">📅 Semana 3 (31 Ago - 04 Sep) — Mitigación de Accesos No Autorizados y Controles</div>
+                <div class="week-content-body">
+                    <div class="content-column">
+                        <div class="column-heading">📚 Contenido Teórico y Recursos Didácticos</div>
+                        <p>Contramedidas activas: políticas de contraseñas seguras (entropía), adopción obligatoria de Autenticación de Multifactor (2FA) y principios de cortafuegos (Firewalls)[cite: 3].</p>
+                        <ul class="material-list">
+                            <li>Guía práctica: "Creación de contraseñas infalibles y activación de 2FA".</li>
+                        </ul>
+                    </div>
+                    <div class="eval-column">
+                        <div class="column-heading">📝 Actividad de Evaluación Enriquecida</div>
+                        <div class="eval-box-title">Taller Práctico de Configuración de Seguridad en Cuentas</div>
+                        <p>Laboratorio guiado de configuración de políticas estrictas de claves y activación de 2FA en plataformas simuladas en la nube[cite: 3].</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="week-box">
+                <div class="week-title-bar">📅 Semana 4 (07-11 Sep) — Ingeniería Social y Phishing (Smishing y Vishing)</div>
+                <div class="week-content-body">
+                    <div class="content-column">
+                        <div class="column-heading">📚 Contenido Teórico y Recursos Didácticos</div>
+                        <p>Ataques de ingeniería social que explotan la vulnerabilidad humana. Estudio de Phishing, Smishing (SMS) y Vishing (llamadas de voz fraudulentas)[cite: 3].</p>
+                        <ul class="material-list">
+                            <li>Anatomía de un correo malicioso: análisis de cabeceras y dominios clonados.</li>
+                        </ul>
+                    </div>
+                    <div class="eval-column">
+                        <div class="column-heading">📝 Actividad de Evaluación Enriquecida</div>
+                        <div class="eval-box-title">Laboratorio de Inspección Visual de Correos Fraudulentos</div>
+                        <p>Análisis técnico de muestras de correos electrónicos para detectar remitentes falsos, URLs fraudulentas y errores de redacción[cite: 3].</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="week-box">
+                <div class="week-title-bar">📅 Semana 5 (14-18 Sep) — Protocolos de Prevención y Verificación contra Phishing</div>
+                <div class="week-content-body">
+                    <div class="content-column">
+                        <div class="column-heading">📚 Contenido Teórico y Recursos Didácticos</div>
+                        <p>Protocolos defensivos contra fraude en línea: validación de certificados SSL/TLS, análisis de estructuras de dominios institucionales y canales de reporte[cite: 3].</p>
+                        <ul class="material-list">
+                            <li>Checklist oficial de verificación de URL antes de ingresar credenciales.</li>
+                        </ul>
+                    </div>
+                    <div class="eval-column">
+                        <div class="column-heading">📝 Actividad de Evaluación Enriquecida</div>
+                        <div class="eval-box-title">Simulación Interactiva de Detección de Dominios Falsos</div>
+                        <p>Evaluación de enlaces web sospechosos mediante plataformas controladas y redacción de un reporte formal de intento de fraude[cite: 3].</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="week-box">
+                <div class="week-title-bar">📅 Semana 6 (21-25 Sep) — Taxonomía del Daño Informático (Malware)</div>
+                <div class="week-content-body">
+                    <div class="content-column">
+                        <div class="column-heading">📚 Contenido Teórico y Recursos Didácticos</div>
+                        <p>Clasificación del Daño Informático por malware: Virus, Troyanos (RAT), Gusanos, Ransomware (secuestro de datos) y Spyware corporativo[cite: 3].</p>
+                        <ul class="material-list">
+                            <li>Infografía técnica sobre el ciclo de infección y persistencia del ransomware.</li>
+                        </ul>
+                    </div>
+                    <div class="eval-column">
+                        <div class="column-heading">📝 Actividad de Evaluación Enriquecida</div>
+                        <div class="eval-box-title">Exposición y Creación de Mapa Mental Taxonómico</div>
+                        <p>Elaboración de mapas mentales detallados explicando el vector de infección y estrategia de contención de familias de malware asignadas[cite: 3].</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="week-box">
+                <div class="week-title-bar">📅 Semana 7 (28 Sep - 02 Oct) — Antimalware y Estrategias de Respaldo (Backup 3-2-1)</div>
+                <div class="week-content-body">
+                    <div class="content-column">
+                        <div class="column-heading">📚 Contenido Teórico y Recursos Didácticos</div>
+                        <p>Operatividad de herramientas antimalware y análisis heurístico. Implementación de la regla de respaldo 3-2-1 y protocolos de recuperación ante desastres[cite: 3].</p>
+                        <ul class="material-list">
+                            <li>Guía de buenas prácticas para automatización de respaldos seguros en nubes cifradas.</li>
+                        </ul>
+                    </div>
+                    <div class="eval-column">
+                        <div class="column-heading">📝 Actividad de Evaluación Enriquecida</div>
+                        <div class="eval-box-title">Taller de Mantenimiento Preventivo y Configuración de Backups</div>
+                        <p>Ejecución de análisis antivirus completo y configuración práctica de una rutina automatizada de respaldo de archivos críticos[cite: 3].</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="week-box">
+                <div class="week-title-bar">📅 Semana 8 (05-09 Oct) — Ciberacoso (Cyberbullying): Implicaciones y Ética</div>
+                <div class="week-content-body">
+                    <div class="content-column">
+                        <div class="column-heading">📚 Contenido Teórico y Recursos Didácticos</div>
+                        <p>Análisis integral del ciberacoso en entornos escolares. Manifestaciones digitales (hostigamiento, suplantación, difamación) y consecuencias legales vigentes[cite: 3].</p>
+                        <ul class="material-list">
+                            <li>Compilación normativas de convivencia digital pacífica.</li>
+                        </ul>
+                    </div>
+                    <div class="eval-column">
+                        <div class="column-heading">📝 Actividad de Evaluación Enriquecida</div>
+                        <div class="eval-box-title">Mesa Redonda y Debate Guiado Institucional</div>
+                        <p>Discusión moderada analizando casos de ciberacoso, evaluando la responsabilidad legal de agresores y espectadores silenciosos[cite: 3].</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="week-box">
+                <div class="week-title-bar">📅 Semana 9 (12-16 Oct) — Protocolos de Prevención y Denuncia del Ciberacoso</div>
+                <div class="week-content-body">
+                    <div class="content-column">
+                        <div class="column-heading">📚 Contenido Teórico y Recursos Didácticos</div>
+                        <p>Protocolos institucionales y familiares ante ciberacoso. Manejo de bloqueos, reporte de abuso, preservación de pruebas digitales con marcas de tiempo y privacidad[cite: 3].</p>
+                        <ul class="material-list">
+                            <li>Guía paso a paso para recopilar evidencia digital legalmente válida.</li>
+                        </ul>
+                    </div>
+                    <div class="eval-column">
+                        <div class="column-heading">📝 Actividad de Evaluación Enriquecida</div>
+                        <div class="eval-box-title">Diseño Colaborativo de Campaña Institucional Preventiva</div>
+                        <p>Creación en equipo de afiches digitales e infografías educativas orientadas a la concientización y cese del ciberacoso en la comunidad[cite: 3].</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="week-box">
+                <div class="week-title-bar">📅 Semana 10 (19-23 Oct) — Grooming: Fases de Captación y Alertas Tempranas</div>
+                <div class="week-content-body">
+                    <div class="content-column">
+                        <div class="column-heading">📚 Contenido Teórico y Recursos Didácticos</div>
+                        <p>Estudio del Grooming (manipulación de menores en línea). Fases de captación del agresor (amistad, aislamiento, secretos, exigencia íntima) y perfiles falsos[cite: 3].</p>
+                        <ul class="material-list">
+                            <li>Guía oficial de protección a la niñez frente a depredadores en redes sociales.</li>
+                        </ul>
+                    </div>
+                    <div class="eval-column">
+                        <div class="column-heading">📝 Actividad de Evaluación Enriquecida</div>
+                        <div class="eval-box-title">Estudio de Casos Hipotéticos y Dramatización Preventiva</div>
+                        <p>Análisis crítico de escenarios de interacción sospechosa y representación teatral de protocolos de corte de comunicación y alerta temprana[cite: 3].</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="week-box">
+                <div class="week-title-bar">📅 Semana 11 (26-30 Oct) — Integración Global y Plan Personal de Seguridad</div>
+                <div class="week-content-body">
+                    <div class="content-column">
+                        <div class="column-heading">📚 Contenido Teórico y Recursos Didácticos</div>
+                        <p>Consolidación global de conocimientos. Elaboración de un Plan Integral de Seguridad Personal y Digital. Redes de apoyo institucional y canales de denuncia en Honduras[cite: 3].</p>
+                        <ul class="material-list">
+                            <li>Plantilla estructurada del Portafolio Personal de Ciberseguridad del Estudiante.</li>
+                        </ul>
+                    </div>
+                    <div class="eval-column">
+                        <div class="column-heading">📝 Actividad de Evaluación Enriquecida</div>
+                        <div class="eval-box-title">Presentación Pública del Portafolio y Proyecto Final Integral</div>
+                        <p>Exposición abierta del plan de seguridad digital personal elaborado por cada alumna, integrando contramedidas frente a amenazas estudiadas[cite: 3].</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ================= ASIGNATURA 4: PROGRAMACIÓN ================= -->
+    <div id="programacion" class="subject-container">
+        <div class="subject-header-banner">
+            <div>
+                <h2>Programación (Lenguaje C++)</h2>
+                <p>Docente: Lic. Ever Omar Nolasco Argueta | IV Parcial 2026[cite: 4]</p>
+            </div>
+            <button class="back-btn" onclick="goHome()">⬅️ Volver al Menú</button>
+        </div>
+
+        <div class="weeks-grid">
+            <div class="week-box">
+                <div class="week-title-bar">📅 Semana (17 Ago - 04 Sep) — Condicionales Simple y Doble (if / if-else en C++)</div>
+                <div class="week-content-body">
+                    <div class="content-column">
+                        <div class="column-heading">📚 Contenido Teórico y Recursos Didácticos</div>
+                        <p>Fundamentos de toma de decisiones en C++. Sintaxis de la estructura condicional simple (`if`), uso de bloques `{}` y bifurcaciones mediante `if-else`[cite: 4].</p>
+                        <ul class="material-list">
+                            <li>Compendio de sintaxis base y códigos comentados en C++ para validación numérica.</li>
+                        </ul>
+                    </div>
+                    <div class="eval-column">
+                        <div class="column-heading">📝 Actividad de Evaluación Enriquecida</div>
+                        <div class="eval-box-title">Taller de Codificación Guiada de Programas con if-else</div>
+                        <p>Desarrollo práctico individual en compilador de un script en C++ que solicite la nota numérica y determine mediante bifurcación si aprobó o reprobó[cite: 4].</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="week-box">
+                <div class="week-title-bar">📅 Semana (07-11 Sep) — Operadores Relacionales y Expresiones Lógicas Compuestas</div>
+                <div class="week-content-body">
+                    <div class="content-column">
+                        <div class="column-heading">📚 Contenido Teórico y Recursos Didácticos</div>
+                        <p>Dominio de operadores relacionales (`==`, `!=`, `<`, `>`, `<=`, `>=`) y lógicos (`&&` [AND], `||` [OR], `!` [NOT]). Evaluación de condiciones compuestas y rangos[cite: 4].</p>
+                        <ul class="material-list">
+                            <li>Tabla de verdad avanzada para operadores lógicos en programación estructurada.</li>
+                        </ul>
+                    </div>
+                    <div class="eval-column">
+                        <div class="column-heading">📝 Actividad de Evaluación Enriquecida</div>
+                        <div class="eval-box-title">Resolución de Retos de Programación (Validación de Rangos)</div>
+                        <p>Creación de un programa en C++ que compruebe si un número ingresado por teclado se encuentra estrictamente dentro de un rango específico usando `&&`[cite: 4].</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="week-box">
+                <div class="week-title-bar">📅 Semana (14-18 Sep) — Estructuras Condicionales Anidadas y Escalera de Decisiones</div>
+                <div class="week-content-body">
+                    <div class="content-column">
+                        <div class="column-heading">📚 Contenido Teórico y Recursos Didácticos</div>
+                        <p>Lógica de anidamiento de condiciones (`if` dentro de otro cuerpo o escalera `if-else if-else`). Prevención del error lógico del "else huérfano" en compiladores[cite: 4].</p>
+                        <ul class="material-list">
+                            <li>Ejemplo comentado de código para clasificación jerárquica de calificaciones literales.</li>
+                        </ul>
+                    </div>
+                    <div class="eval-column">
+                        <div class="column-heading">📝 Actividad de Evaluación Enriquecida</div>
+                        <div class="eval-box-title">Modelado Guiado de Menús Interactivos Múltiples</div>
+                        <p>Escritura paso a paso en C++ de un programa que despliegue un menú numérico de opciones para cálculo de áreas geométricas mediante estructuras anidadas[cite: 4].</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="week-box">
+                <div class="week-title-bar">📅 Semana (21-25 Sep) — Depuración de Código y Pruebas de Escritorio Digitales</div>
+                <div class="week-content-body">
+                    <div class="content-column">
+                        <div class="column-heading">📚 Contenido Teórico y Recursos Didácticos</div>
+                        <p>Evaluación de múltiples condiciones aplicadas a problemas reales. Ejecución rigurosa de pruebas de escritorio digitales y seguimiento manual de variables para detectar bugs[cite: 4].</p>
+                        <ul class="material-list">
+                            <li>Guía metodológica para la depuración sistemática de errores lógicos en C++.</li>
+                        </ul>
+                    </div>
+                    <div class="eval-column">
+                        <div class="column-heading">📝 Actividad de Evaluación Enriquecida</div>
+                        <div class="eval-box-title">Taller Práctico de Refactorización y Optimización</div>
+                        <p>Refactorización de un script en C++ con anidamientos excesivos para reducir profundidad, simplificar condiciones y mejorar legibilidad[cite: 4].</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="week-box">
+                <div class="week-title-bar">📅 Semanas (28 Sep - 30 Oct) — Proyecto Integrador de Condicionales en C++</div>
+                <div class="week-content-body">
+                    <div class="content-column">
+                        <div class="column-heading">📚 Contenido Teórico y Recursos Didácticos</div>
+                        <p>Consolidación integral en la construcción de programas complejos combinando condicionales simples, dobles y anidadas. Buenas prácticas de indentación y comentarios[cite: 4].</p>
+                        <ul class="material-list">
+                            <li>Rúbrica oficial de evaluación de calidad de código fuente en C++.</li>
+                        </ul>
+                    </div>
+                    <div class="eval-column">
+                        <div class="column-heading">📝 Actividad de Evaluación Enriquecida</div>
+                        <div class="eval-box-title">Laboratorio Práctico Integrador y Defensa de Proyecto</div>
+                        <p>Desarrollo y entrega de un proyecto integral en C++ que resuelva un problema real de toma de decisiones jerárquicas (ej. sistema de cobro en caja con descuentos)[cite: 4].</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ================= ASIGNATURA 5: OFIMÁTICA ================= -->
+    <div id="ofimatica" class="subject-container">
+        <div class="subject-header-banner">
+            <div>
+                <h2>Ofimática</h2>
+                <p>Docente: Lic. Ever Omar Nolasco Argueta | IV Parcial 2026[cite: 5]</p>
+            </div>
+            <button class="back-btn" onclick="goHome()">⬅️ Volver al Menú</button>
+        </div>
+
+        <div class="weeks-grid">
+            <div class="week-box">
+                <div class="week-title-bar">📅 Semanas (17-28 Ago) — Redacción Profesional de Correspondencia Oficial</div>
+                <div class="week-content-body">
+                    <div class="content-column">
+                        <div class="column-heading">📚 Contenido Teórico y Recursos Didácticos</div>
+                        <p>Principios normativos de redacción moderna (claridad, concisión, cortesía). Estructura formal de cartas comerciales, memorandos, circulares y oficios. Estilos de maquetación[cite: 5].</p>
+                        <ul class="material-list">
+                            <li>Plantillas oficiales estandarizadas de cartas comerciales y oficios institucionales.</li>
+                        </ul>
+                    </div>
+                    <div class="eval-column">
+                        <div class="column-heading">📝 Actividad de Evaluación Enriquecida</div>
+                        <div class="eval-box-title">Estudio de Casos de Auditoría y Redacción de Documentos</div>
+                        <p>Corrección de estilo sobre correspondencia comercial con errores intencionales y redacción de un oficio institucional bajo simulación de oficina[cite: 5].</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="week-box">
+                <div class="week-title-bar">📅 Semana (31 Ago - 11 Sep) — Validación Avanzada de Datos en Hojas de Cálculo</div>
+                <div class="week-content-body">
+                    <div class="content-column">
+                        <div class="column-heading">📚 Contenido Teórico y Recursos Didácticos</div>
+                        <p>Control de integridad en Excel mediante validación de celdas. Listas desplegables dinámicas, restricciones numéricas enteras/decimales, longitudes de texto y alertas de error[cite: 5].</p>
+                        <ul class="material-list">
+                            <li>Tutorial técnico: "Diseño y protección de formularios automatizados seguros en Excel".</li>
+                        </ul>
+                    </div>
+                    <div class="eval-column">
+                        <div class="column-heading">📝 Actividad de Evaluación Enriquecida</div>
+                        <div class="eval-box-title">Modelado Guiado de Formulario Automatizado de Empleados</div>
+                        <p>Creación de una plantilla de registro laboral en Excel aplicando listas desplegables dependientes y validación numérica con mensajes personalizados[cite: 5].</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="week-box">
+                <div class="week-title-bar">📅 Semanas (14 Sep - 02 Oct) — Filtros Avanzados y Segmentación de Datos</div>
+                <div class="week-content-body">
+                    <div class="content-column">
+                        <div class="column-heading">📚 Contenido Teórico y Recursos Didácticos</div>
+                        <p>Explotación analítica de bases de datos masivas. Filtros avanzados por rangos de criterios independientes aplicando operadores lógicos implícitos $(Y / O)$[cite: 5].</p>
+                        <ul class="material-list">
+                            <li>Guía rápida de referencia para sintaxis de rangos de criterios en Excel.</li>
+                        </ul>
+                    </div>
+                    <div class="eval-column">
+                        <div class="column-heading">📝 Actividad de Evaluación Enriquecida</div>
+                        <div class="eval-box-title">Laboratorio Práctico Evaluado de Extracción de Datos</div>
+                        <p>Resolución de consultas complejas de negocio a partir de una base de datos masiva aplicando filtros avanzados con múltiples criterios[cite: 5].</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="week-box">
+                <div class="week-title-bar">📅 Semanas (05-30 Oct) — Formato Condicional y Cuadros de Mando (Dashboards)</div>
+                <div class="week-content-body">
+                    <div class="content-column">
+                        <div class="column-heading">📚 Contenido Teórico y Recursos Didácticos</div>
+                        <p>Técnicas de visualización gerencial y patrones operativos. Reglas de formato condicional avanzadas, barras de datos proporcionales, escalas de color y semáforos de iconos[cite: 5].</p>
+                        <ul class="material-list">
+                            <li>Manual avanzado de diseño de tableros interactivos (Dashboards) para análisis financiero.</li>
+                        </ul>
+                    </div>
+                    <div class="eval-column">
+                        <div class="column-heading">📝 Actividad de Evaluación Enriquecida</div>
+                        <div class="eval-box-title">Desafío Estético: Creación de un Semáforo Financiero</div>
+                        <p>Diseño individual de un tablero interactivo de control financiero en Excel utilizando formato condicional avanzado con conjuntos de iconos dinámicos[cite: 5].</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<footer>
+    <p>C.E.M.N.G. "Villa de las Niñas" — Departamento de Informática | Ciclo Académico 2026[cite: 1, 2, 3, 4, 5]</p>
+</footer>
+
+<script>
+    function openSubject(subjectId, event) {
+        document.getElementById('welcome-view').style.display = 'none';
+        
+        const subjects = document.querySelectorAll('.subject-container');
+        subjects.forEach(sub => sub.classList.remove('active'));
+
+        const cards = document.querySelectorAll('.nav-card');
+        cards.forEach(card => card.classList.remove('active'));
+
+        document.getElementById(subjectId).classList.add('active');
+        event.currentTarget.classList.add('active');
+
+        window.scrollTo({ top: 180, behavior: 'smooth' });
+    }
+
+    function goHome() {
+        const subjects = document.querySelectorAll('.subject-container');
+        subjects.forEach(sub => sub.classList.remove('active'));
+
+        const cards = document.querySelectorAll('.nav-card');
+        cards.forEach(card => card.classList.remove('active'));
+
+        document.getElementById('welcome-view').style.display = 'block';
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+</script>
+
+</body>
+</html>
